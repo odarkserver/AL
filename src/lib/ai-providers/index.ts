@@ -3,6 +3,8 @@ import { OpenAIProvider } from './openai-provider'
 import { AnthropicProvider } from './anthropic-provider'
 import { GoogleProvider } from './google-provider'
 import { HuggingFaceProvider } from './huggingface-provider'
+import { GitHubProvider } from './github-provider'
+import { CustomTrainableProvider } from './custom-trainable-provider'
 
 export interface AIProvider {
   name: string
@@ -100,9 +102,17 @@ export class AIProviderManager {
 
   private async initializeProviders() {
     try {
-      // Initialize Z-AI Provider (always available)
+      // Initialize Z-AI Ultra Provider (always available - UPGRADED)
       const zaiProvider = new ZAIProvider()
       this.providers.set('z-ai', zaiProvider)
+
+      // Initialize GitHub AI Provider (always available - NEW)
+      const githubProvider = new GitHubProvider()
+      this.providers.set('github', githubProvider)
+
+      // Initialize Custom Trainable Provider (always available - NEW)
+      const customProvider = new CustomTrainableProvider()
+      this.providers.set('custom-trainable', customProvider)
 
       // Initialize OpenAI Provider
       if (process.env.OPENAI_API_KEY) {
@@ -128,7 +138,7 @@ export class AIProviderManager {
         this.providers.set('huggingface', hfProvider)
       }
 
-      console.log(`Initialized ${this.providers.size} AI providers`)
+      console.log(`Initialized ${this.providers.size} AI providers including Z-AI Ultra, GitHub AI, and Custom Trainable AI`)
     } catch (error) {
       console.error('Error initializing AI providers:', error)
     }
@@ -224,3 +234,5 @@ export * from './openai-provider'
 export * from './anthropic-provider'
 export * from './google-provider'
 export * from './huggingface-provider'
+export * from './github-provider'
+export * from './custom-trainable-provider'
