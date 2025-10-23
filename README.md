@@ -1,68 +1,293 @@
-# 🚀 Welcome to Z.ai Code Scaffold
+# 🤖 ODARK AI Assistant
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+Advanced AI-powered assistant with real-time chat, image generation, and web search capabilities. Built with Next.js 15, TypeScript, and cutting-edge AI technologies.
 
-## ✨ Technology Stack
+## ✨ Features
 
-This scaffold provides a robust foundation built with:
+### 🎯 Core Capabilities
+- **💬 AI Chat Interface** - Real-time conversations with advanced AI models
+- **🎨 Image Generation** - Create stunning images with AI-powered generation
+- **🔍 Web Search** - Intelligent web search with ranked results
+- **📱 Responsive Design** - Mobile-first, modern UI with glass morphism effects
+- **🌙 Dark Theme** - Beautiful dark mode with gradient backgrounds
 
-### 🎯 Core Framework
-- **⚡ Next.js 15** - The React framework for production with App Router
-- **📘 TypeScript 5** - Type-safe JavaScript for better developer experience
-- **🎨 Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+### 🚀 Advanced Features
+- **🔐 Authentication System** - Secure login with GitHub, Google, and email
+- **💾 Database Integration** - Full Prisma ORM with SQLite
+- **⚡ Real-time Features** - WebSocket support for live collaboration
+- **📊 Analytics & Logging** - Comprehensive usage tracking and system logs
+- **🐳 Docker Support** - Containerized deployment with Docker & Docker Compose
+- **🔄 CI/CD Pipeline** - Automated testing, building, and deployment with GitHub Actions
 
-### 🧩 UI Components & Styling
-- **🧩 shadcn/ui** - High-quality, accessible components built on Radix UI
-- **🎯 Lucide React** - Beautiful & consistent icon library
-- **🌈 Framer Motion** - Production-ready motion library for React
-- **🎨 Next Themes** - Perfect dark mode in 2 lines of code
+## 🛠 Technology Stack
 
-### 📋 Forms & Validation
-- **🎣 React Hook Form** - Performant forms with easy validation
-- **✅ Zod** - TypeScript-first schema validation
+### Core Framework
+- **⚡ Next.js 15** - React framework with App Router
+- **📘 TypeScript 5** - Type-safe development
+- **🎨 Tailwind CSS 4** - Modern utility-first CSS
+- **🧩 shadcn/ui** - High-quality accessible components
 
-### 🔄 State Management & Data Fetching
-- **🐻 Zustand** - Simple, scalable state management
-- **🔄 TanStack Query** - Powerful data synchronization for React
-- **🌐 Axios** - Promise-based HTTP client
+### AI & Backend
+- **🤖 Z-AI Web Dev SDK** - Advanced AI integration
+- **🗄️ Prisma ORM** - Type-safe database operations
+- **🔐 NextAuth.js** - Complete authentication solution
+- **⚡ Socket.io** - Real-time WebSocket communication
 
-### 🗄️ Database & Backend
-- **🗄️ Prisma** - Next-generation Node.js and TypeScript ORM
-- **🔐 NextAuth.js** - Complete open-source authentication solution
-
-### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
-- **🖱️ DND Kit** - Modern drag and drop toolkit for React
-- **📊 Recharts** - Redefined chart library built with React and D3
-- **🖼️ Sharp** - High performance image processing
-
-### 🌍 Internationalization & Utilities
-- **🌍 Next Intl** - Internationalization library for Next.js
-- **📅 Date-fns** - Modern JavaScript date utility library
-- **🪝 ReactUse** - Collection of essential React hooks for modern development
-
-## 🎯 Why This Scaffold?
-
-- **🏎️ Fast Development** - Pre-configured tooling and best practices
-- **🎨 Beautiful UI** - Complete shadcn/ui component library with advanced interactions
-- **🔒 Type Safety** - Full TypeScript configuration with Zod validation
-- **📱 Responsive** - Mobile-first design principles with smooth animations
-- **🗄️ Database Ready** - Prisma ORM configured for rapid backend development
-- **🔐 Auth Included** - NextAuth.js for secure authentication flows
-- **📊 Data Visualization** - Charts, tables, and drag-and-drop functionality
-- **🌍 i18n Ready** - Multi-language support with Next Intl
-- **🚀 Production Ready** - Optimized build and deployment settings
-- **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
+### Development & Deployment
+- **🐳 Docker** - Containerization
+- **🔄 GitHub Actions** - CI/CD pipeline
+- **📊 ESLint & TypeScript** - Code quality assurance
+- **🎯 Framer Motion** - Smooth animations
 
 ## 🚀 Quick Start
 
+### Prerequisites
+- Node.js 20 or higher
+- npm or yarn
+- Git
+
+### Installation
+
 ```bash
+# Clone the repository
+git clone https://github.com/odarkserver/AL.git
+cd AL
+
 # Install dependencies
 npm install
 
+# Setup environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# Setup database
+npm run db:push
+npm run db:generate
+
 # Start development server
 npm run dev
+```
 
+Open [http://localhost:3000](http://localhost:3000) to see the application.
+
+### Environment Variables
+
+Create a `.env` file with the following variables:
+
+```env
+# Database
+DATABASE_URL="file:./dev.db"
+
+# NextAuth.js
+NEXTAUTH_SECRET="your-secret-key"
+NEXTAUTH_URL="http://localhost:3000"
+
+# OAuth Providers (Optional)
+GITHUB_ID="your-github-client-id"
+GITHUB_SECRET="your-github-client-secret"
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+# Z-AI SDK (Optional - uses default if not provided)
+Z_AI_API_KEY="your-z-ai-api-key"
+```
+
+## 📁 Project Structure
+
+```
+AL/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── api/               # API routes
+│   │   │   ├── auth/          # Authentication endpoints
+│   │   │   ├── chat/          # AI chat API
+│   │   │   ├── generate-image/ # Image generation API
+│   │   │   └── web-search/    # Web search API
+│   │   ├── auth/              # Authentication pages
+│   │   └── page.tsx           # Main application page
+│   ├── components/            # React components
+│   │   ├── ui/               # shadcn/ui components
+│   │   ├── chat-interface.tsx # Chat component
+│   │   ├── image-generator.tsx # Image generation
+│   │   └── web-search.tsx    # Web search component
+│   ├── lib/                   # Utilities and configurations
+│   │   ├── auth.ts           # NextAuth configuration
+│   │   ├── db.ts             # Database client
+│   │   ├── socket.ts         # WebSocket setup
+│   │   └── utils.ts          # Helper functions
+│   └── hooks/                 # Custom React hooks
+├── prisma/
+│   └── schema.prisma         # Database schema
+├── public/                   # Static assets
+├── .github/
+│   └── workflows/           # GitHub Actions CI/CD
+├── Dockerfile               # Docker configuration
+├── docker-compose.yml       # Docker Compose setup
+└── README.md               # This file
+```
+
+## 🎯 Available Features
+
+### 💬 AI Chat
+- Real-time conversation with AI
+- Message history and persistence
+- Typing indicators
+- Multiple chat sessions
+- WebSocket support for real-time updates
+
+### 🎨 Image Generation
+- AI-powered image creation
+- Multiple size options (512x512, 1024x1024, etc.)
+- Download generated images
+- Image history
+- Progress tracking with WebSocket
+
+### 🔍 Web Search
+- Real-time web search
+- Ranked search results
+- Search history
+- Multiple search engines support
+- Result caching
+
+### 🔐 Authentication
+- Email/password authentication
+- OAuth providers (GitHub, Google)
+- Secure session management
+- User profile management
+- Role-based access control
+
+### 📊 Database Features
+- User management
+- Chat session persistence
+- Image generation history
+- Web search logs
+- API usage tracking
+- System logging
+
+## 🐳 Docker Deployment
+
+### Using Docker Compose (Recommended)
+
+```bash
+# Build and start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+### Using Docker Directly
+
+```bash
+# Build the image
+docker build -t odark-ai .
+
+# Run the container
+docker run -p 3000:3000 --env-file .env odark-ai
+```
+
+## 🔄 CI/CD Pipeline
+
+The project includes a comprehensive GitHub Actions workflow that:
+
+- ✅ **Linting** - Code quality checks with ESLint
+- 🔍 **Testing** - Build verification and smoke tests
+- 🔒 **Security** - Dependency audit and secret scanning
+- 🚀 **Deployment** - Automated deployment to production
+- 🐳 **Docker** - Build and push Docker images
+
+### Required GitHub Secrets
+
+Set these secrets in your GitHub repository settings:
+
+- `NEXTAUTH_SECRET`
+- `NEXTAUTH_URL`
+- `GITHUB_ID`
+- `GITHUB_SECRET`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `VERCEL_TOKEN` (for Vercel deployment)
+- `DOCKER_USERNAME` (for Docker Hub)
+- `DOCKER_PASSWORD` (for Docker Hub)
+
+## 📚 API Documentation
+
+### Chat API
+```typescript
+POST /api/chat
+{
+  "messages": [
+    { "role": "user", "content": "Hello!" }
+  ]
+}
+```
+
+### Image Generation API
+```typescript
+POST /api/generate-image
+{
+  "prompt": "A beautiful sunset",
+  "size": "1024x1024"
+}
+```
+
+### Web Search API
+```typescript
+POST /api/web-search
+{
+  "query": "Next.js 15 features",
+  "num": 10
+}
+```
+
+## 🎨 Customization
+
+### Theming
+The application uses a dark theme with purple/pink gradients. Customize colors in:
+
+- `tailwind.config.ts` - Tailwind configuration
+- `src/app/globals.css` - Global styles
+- Component files for specific styling
+
+### AI Models
+Modify AI behavior in:
+- `src/app/api/chat/route.ts` - Chat configuration
+- `src/app/api/generate-image/route.ts` - Image generation settings
+- `src/lib/auth.ts` - Authentication system
+
+### Database Schema
+Update the database schema in `prisma/schema.prisma` and run:
+
+```bash
+npm run db:push
+npm run db:generate
+```
+
+## 🚀 Production Deployment
+
+### Vercel (Recommended)
+1. Connect your GitHub repository to Vercel
+2. Configure environment variables
+3. Deploy automatically on push to main branch
+
+### Docker
+```bash
+# Build production image
+docker build -t odarkserver/odark-ai:latest .
+
+# Run with production settings
+docker run -d \
+  --name odark-ai \
+  -p 3000:3000 \
+  --env-file .env.production \
+  odarkserver/odark-ai:latest
+```
+
+### Traditional Server
+```bash
 # Build for production
 npm run build
 
@@ -70,72 +295,34 @@ npm run build
 npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your application running.
+## 🤝 Contributing
 
-## 🤖 Powered by Z.ai
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
+## 📄 License
 
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
+## 🙏 Acknowledgments
 
-## 📁 Project Structure
+- [Z-AI](https://z-ai.com) - For the powerful AI SDK
+- [Next.js](https://nextjs.org) - The React framework
+- [shadcn/ui](https://ui.shadcn.com) - Beautiful UI components
+- [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS framework
+- [Prisma](https://prisma.io) - Next-generation ORM
 
-```
-src/
-├── app/                 # Next.js App Router pages
-├── components/          # Reusable React components
-│   └── ui/             # shadcn/ui components
-├── hooks/              # Custom React hooks
-└── lib/                # Utility functions and configurations
-```
+## 📞 Support
 
-## 🎨 Available Features & Components
-
-This scaffold includes a comprehensive set of modern web development tools:
-
-### 🧩 UI Components (shadcn/ui)
-- **Layout**: Card, Separator, Aspect Ratio, Resizable Panels
-- **Forms**: Input, Textarea, Select, Checkbox, Radio Group, Switch
-- **Feedback**: Alert, Toast (Sonner), Progress, Skeleton
-- **Navigation**: Breadcrumb, Menubar, Navigation Menu, Pagination
-- **Overlay**: Dialog, Sheet, Popover, Tooltip, Hover Card
-- **Data Display**: Badge, Avatar, Calendar
-
-### 📊 Advanced Data Features
-- **Tables**: Powerful data tables with sorting, filtering, pagination (TanStack Table)
-- **Charts**: Beautiful visualizations with Recharts
-- **Forms**: Type-safe forms with React Hook Form + Zod validation
-
-### 🎨 Interactive Features
-- **Animations**: Smooth micro-interactions with Framer Motion
-- **Drag & Drop**: Modern drag-and-drop functionality with DND Kit
-- **Theme Switching**: Built-in dark/light mode support
-
-### 🔐 Backend Integration
-- **Authentication**: Ready-to-use auth flows with NextAuth.js
-- **Database**: Type-safe database operations with Prisma
-- **API Client**: HTTP requests with Axios + TanStack Query
-- **State Management**: Simple and scalable with Zustand
-
-### 🌍 Production Features
-- **Internationalization**: Multi-language support with Next Intl
-- **Image Optimization**: Automatic image processing with Sharp
-- **Type Safety**: End-to-end TypeScript with Zod validation
-- **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
-
-## 🤝 Get Started with Z.ai
-
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
+For support and questions:
+- Create an issue on GitHub
+- Visit the [documentation](https://github.com/odarkserver/AL/wiki)
+- Contact the maintainers
 
 ---
 
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+**Built with ❤️ by ODARK Server**  
+*Advanced AI Assistant for the Modern Web*

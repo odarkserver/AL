@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { SessionProviderWrapper } from "@/components/providers/session-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,24 +15,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Z.ai Code Scaffold - AI-Powered Development",
-  description: "Modern Next.js scaffold optimized for AI-powered development with Z.ai. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
-  keywords: ["Z.ai", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"],
-  authors: [{ name: "Z.ai Team" }],
+  title: "ODARK AI Assistant - Advanced AI Chat, Image Generation & Web Search",
+  description: "Powerful AI assistant with chat, image generation, and web search capabilities. Built with Next.js 15, TypeScript, and modern AI technologies.",
+  keywords: ["ODARK AI", "Next.js", "TypeScript", "AI Assistant", "Chat", "Image Generation", "Web Search", "shadcn/ui"],
+  authors: [{ name: "ODARK Server" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/favicon.png",
+    apple: "/logo.png",
   },
   openGraph: {
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
-    url: "https://chat.z.ai",
-    siteName: "Z.ai",
+    title: "ODARK AI Assistant",
+    description: "Advanced AI assistant with multiple capabilities",
+    url: "https://github.com/odarkserver/AL",
+    siteName: "ODARK AI",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
+    title: "ODARK AI Assistant",
+    description: "Advanced AI assistant with chat, image generation, and web search",
   },
 };
 
@@ -41,12 +43,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="id" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        {children}
-        <Toaster />
+        <SessionProviderWrapper>
+          {children}
+          <Toaster />
+        </SessionProviderWrapper>
       </body>
     </html>
   );

@@ -14,19 +14,155 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  avatar        String?
+  role          Role     @default(USER)
+  isActive      Boolean  @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  chatSessions  ChatSession[]
+  images        GeneratedImage[]
+  searches      WebSearch[]
+  settings      UserSettings?
+  
+  @@map("users")
 }
 
-model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model UserSettings {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  theme             String   @default("dark")
+  language          String   @default("id")
+  notifications     Boolean  @default(true)
+  autoSave          Boolean  @default(true)
+  maxTokens         Int      @default(2000)
+  temperature       Float    @default(0.7)
+  imageQuality      String   @default("standard")
+  searchResults     Int      @default(10)
+  
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@map("user_settings")
+}
+
+model ChatSession {
+  id          String   @id @default(cuid())
+  userId      String?
+  title       String?
+  model       String   @default("gpt-3.5-turbo")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  messages    ChatMessage[]
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id            String      @id @default(cuid())
+  sessionId     String
+  role          MessageRole
+  content       String
+  tokens        Int?
+  model         String?
+  finishReason  String?
+  createdAt     DateTime    @default(now())
+  
+  // Relations
+  session       ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  @@map("chat_messages")
+}
+
+model GeneratedImage {
+  id          String   @id @default(cuid())
+  userId      String?
+  prompt      String
+  imageData   String   // Base64 encoded image
+  size        String
+  model       String   @default("dall-e-3")
+  style       String?
+  revisedPrompt String?
+  cost        Float?
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@map("generated_images")
+}
+
+model WebSearch {
+  id          String   @id @default(cuid())
+  userId      String?
+  query       String
+  results     Json     // Store search results as JSON
+  resultCount Int
+  engine      String   @default("google")
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@map("web_searches")
+}
+
+model ApiUsage {
+  id          String   @id @default(cuid())
+  userId      String?
+  endpoint    String
+  method      String
+  tokens      Int?
+  cost        Float?
+  statusCode  Int
+  responseTime Int     // in milliseconds
+  userAgent   String?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+  
+  @@map("api_usage")
+}
+
+model SystemLog {
+  id          String   @id @default(cuid())
+  level       LogLevel
+  message     String
+  context     Json?
+  userId      String?
+  endpoint    String?
+  method      String?
+  statusCode  Int?
+  createdAt   DateTime @default(now())
+  
+  @@map("system_logs")
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARN
+  ERROR
+  FATAL
 }
