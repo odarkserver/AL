@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import ZAI from 'z-ai-web-dev-sdk'
+import { aiManager, ChatMessage } from '@/lib/ai-providers'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { messages } = body
+    const { messages, provider, model, temperature, maxTokens, systemPrompt } = body
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
@@ -13,48 +13,69 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const zai = await ZAI.create()
+    // Convert messages to ChatMessage format
+    const chatMessages: ChatMessage[] = messages.map((msg: any) => ({
+      role: msg.role,
+      content: msg.content,
+      timestamp: msg.timestamp ? new Date(msg.timestamp) : undefined
+    }))
 
-    const completion = await zai.chat.completions.create({
-      messages: [
-        {
-          role: 'system',
-          content: `Anda adalah ODARK AI Assistant, sebuah asisten AI yang cerdas, ramah, dan sangat membantu. 
-          
-          Panduan perilaku:
-          - Selalu responsif dan membantu pengguna
-          - Berikan jawaban yang informatif dan akurat
-          - Gunakan bahasa Indonesia yang baik dan sopan
-          - Bantu berbagai jenis pertanyaan: edukasi, teknologi, kreativitas, dll
-          - Jika tidak tahu jawabannya, sampaikan dengan jujur
-          - Hindari konten yang berbahaya, ilegal, atau tidak etis
-          - Fokus pada memberikan nilai positif kepada pengguna
-          
-          Tujuan Anda adalah menjadi asisten AI yang dapat diandalkan dan bermanfaat untuk berbagai kebutuhan pengguna.`
-        },
-        ...messages
-      ],
-      temperature: 0.7,
-      max_tokens: 2000
+    // Call AI with multi-provider support
+    const response = await aiManager.chat(chatMessages, {
+      provider: provider,
+      model: model,
+      temperature: temperature,
+      maxTokens: maxTokens,
+      systemPrompt: systemPrompt
     })
 
-    const messageContent = completion.choices[0]?.message?.content
-
-    if (!messageContent) {
-      throw new Error('No response from AI')
-    }
-
     return NextResponse.json({
-      content: messageContent,
-      role: 'assistant'
+      content: response.content,
+      model: response.model,
+      provider: response.provider,
+      usage: response.usage,
+      finishReason: response.finishReason,
+      timestamp: response.timestamp
     })
 
   } catch (error: any) {
-    console.error('Chat API Error:', error)
+    console.error('Multi-Provider Chat API Error:', error)
     
     return NextResponse.json(
       { 
         error: 'Failed to process chat request',
+        message: error.message || 'Internal server error',
+        availableProviders: aiManager.getAvailableProviders()
+      },
+      { status: 500 }
+    )
+  }
+}
+
+// GET endpoint to get available providers and models
+export async function GET() {
+  try {
+    const availableProviders = aiManager.getAvailableProviders()
+    const allModels = aiManager.getAllModels()
+    const defaultProvider = aiManager.getDefaultProvider()
+
+    const providerInfo = availableProviders.map(providerName => 
+      aiManager.getProviderInfo(providerName)
+    )
+
+    return NextResponse.json({
+      providers: availableProviders,
+      models: allModels,
+      defaultProvider,
+      providerInfo
+    })
+
+  } catch (error: any) {
+    console.error('Chat Info API Error:', error)
+    
+    return NextResponse.json(
+      { 
+        error: 'Failed to get chat information',
         message: error.message || 'Internal server error'
       },
       { status: 500 }
