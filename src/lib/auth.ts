@@ -4,7 +4,6 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 import { db } from '@/lib/db'
-import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -20,20 +19,28 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const user = await db.user.findUnique({
+        // For demo purposes, create or get user without password verification
+        // In production, you'd verify with bcrypt
+        let user = await db.user.findUnique({
           where: { email: credentials.email },
           include: { settings: true }
         })
 
-        if (!user || !user.isActive) {
-          return null
+        if (!user) {
+          // Create new user for demo
+          user = await db.user.create({
+            data: {
+              email: credentials.email,
+              name: credentials.email.split('@')[0],
+              settings: {
+                create: {}
+              }
+            },
+            include: { settings: true }
+          })
         }
 
-        // For demo purposes, skip password verification
-        // In production, you'd verify with bcrypt
-        const isPasswordValid = true // await bcrypt.compare(credentials.password, user.password || '')
-
-        if (!isPasswordValid) {
+        if (!user.isActive) {
           return null
         }
 
@@ -46,14 +53,14 @@ export const authOptions: NextAuthOptions = {
         }
       }
     }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
+    // GitHubProvider({
+    //   clientId: process.env.GITHUB_ID!,
+    //   clientSecret: process.env.GITHUB_SECRET!,
+    // }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID!,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    // }),
   ],
   session: {
     strategy: 'jwt',
@@ -76,6 +83,5 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/auth/signin',
-    signUp: '/auth/signup',
   },
 }
